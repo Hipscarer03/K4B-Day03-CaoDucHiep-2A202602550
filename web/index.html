@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌴 Travel ReAct Agent AI — MCP Enhanced UI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation / Trace Panel Drawer -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-compass fa-spin-pulse"></i>
+                    <span>Travel ReAct AI</span>
+                </div>
+                <button class="icon-btn" id="closeSidebarBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-sliders"></i> Chế độ Hoạt động</h3>
+                <div class="mode-selector">
+                    <label class="mode-card active" id="modeReact">
+                        <input type="radio" name="agentMode" value="react" checked>
+                        <div class="mode-icon"><i class="fa-solid fa-brain"></i></div>
+                        <div class="mode-info">
+                            <strong>ReAct Agent (Cấp 3)</strong>
+                            <span>Thought $\rightarrow$ Action $\rightarrow$ Observation (MCP Server)</span>
+                        </div>
+                    </label>
+                    <label class="mode-card" id="modeBaseline">
+                        <input type="radio" name="agentMode" value="baseline">
+                        <div class="mode-icon"><i class="fa-solid fa-robot"></i></div>
+                        <div class="mode-info">
+                            <strong>Chatbot Baseline (Cấp 2)</strong>
+                            <span>Mô hình cơ bản không có Tool tra cứu</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-server"></i> Trạng thái Hệ thống</h3>
+                <div class="status-list">
+                    <div class="status-item">
+                        <span class="status-label"><i class="fa-solid fa-plug"></i> Provider</span>
+                        <span class="status-value badge" id="statusProvider">GeminiProvider</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label"><i class="fa-solid fa-microchip"></i> LLM Model</span>
+                        <span class="status-value badge glow" id="statusModel">gemini-1.5-flash</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label"><i class="fa-solid fa-network-wired"></i> MCP Server</span>
+                        <span class="status-value badge success" id="statusServer">travel-assistant-mcp-server</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-chart-waterfall"></i> Waterfall Trace Inspector</h3>
+                <p class="section-desc">Vết quan sát độ trễ & cây thực thi từng bước (docs/trace_waterfall.json)</p>
+                <div class="trace-tree" id="traceTree">
+                    <div class="empty-trace">Chưa có phiên tương tác nào...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat App Area -->
+        <main class="main-content">
+            <!-- Top Navigation Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="icon-btn" id="toggleSidebarBtn"><i class="fa-solid fa-bars-staggered"></i></button>
+                    <div class="header-title">
+                        <h2>🌴 Trợ Lý Tư Vấn Du Lịch Thông Minh</h2>
+                        <span class="subtitle">Ứng dụng ReAct Agent System & Giao thức Model Context Protocol (MCP)</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-outline" id="clearChatBtn"><i class="fa-solid fa-rotate"></i> Làm mới Chat</button>
+                    <button class="btn btn-primary" id="openWaterfallBtn"><i class="fa-solid fa-list-check"></i> Trace Log</button>
+                </div>
+            </header>
+
+            <!-- Preset Test Case Bar -->
+            <div class="preset-bar">
+                <div class="preset-title"><i class="fa-solid fa-vials"></i> 5 Test Cases Thử nghiệm:</div>
+                <div class="preset-chips" id="presetChips">
+                    <button class="chip" data-tc="TC01" data-prompt="Chào bạn, bạn có thể giới thiệu các lưu ý cơ bản và mẹo chuẩn bị khi đi du lịch tự túc không?">
+                        <span class="chip-id">TC01</span> Direct Query
+                    </button>
+                    <button class="chip" data-tc="TC02" data-prompt="Hãy tra cứu bài đăng review và gợi ý lịch trình du lịch tại Đà Nẵng.">
+                        <span class="chip-id">TC02</span> Single Tool
+                    </button>
+                    <button class="chip" data-tc="TC03" data-prompt="Hãy gợi ý lịch trình du lịch 3 ngày 2 đêm tại Đà Nẵng cho 2 người, bao gồm các thông tin về khu vực tham quan địa phương">
+                        <span class="chip-id">TC03</span> Trip Planning
+                    </button>
+                    <button class="chip" data-tc="TC04" data-prompt="Hãy gợi ý khách sạn/ home stay trong khu vực gần Đà Lạt với budget dưới 1 triệu đồng/ đêm có nhiều khu vực trải nghiệm địa phương ít người biết">
+                        <span class="chip-id">TC04</span> Homestay Đà Lạt &lt; 1M
+                    </button>
+                    <button class="chip" data-tc="TC05" data-prompt="Hãy nêu các lưu ý khi tham gia khu vực du lịch một mình ở địa điểm Aleloodjs">
+                        <span class="chip-id">TC05</span> Edge Case (Aleloodjs)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Stream Area -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-card">
+                    <div class="welcome-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                    <h3>Chào mừng đến với Trợ Lý ReAct Du Lịch!</h3>
+                    <p>Hệ thống tự động suy luận (Thought), gọi công cụ qua MCP Server (Action) và tổng hợp kết quả (Observation) hiển thị theo dạng <strong>Streaming Token Real-time</strong>.</p>
+                    <div class="welcome-actions">
+                        <span>Bấm vào một trong 5 nút Test Cases ở trên hoặc nhập câu hỏi bên dưới để bắt đầu.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="input-container">
+                <div class="input-box">
+                    <textarea id="userInput" placeholder="Hỏi bất kỳ điều gì về du lịch, lịch trình hay homestay..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-btn" title="Gửi câu hỏi">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span><i class="fa-solid fa-bolt"></i> Streaming Output & Auto MCP Tool Dispatch Active</span>
+                    <span class="model-tag"><i class="fa-solid fa-sparkles"></i> Native Function Calling</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="app.js"></script>
+</body>
+</html>

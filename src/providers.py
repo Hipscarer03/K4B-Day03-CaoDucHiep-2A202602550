@@ -15,9 +15,8 @@ if sys.stdout.encoding != 'utf-8':
     except Exception:
         pass
 
-load_dotenv()
-
 class BaseLLMProvider:
+
     """Interface cơ sở cho các LLM Provider hỗ trợ Native Tool Calling"""
     def generate(self, prompt: str, system_prompt: str = "") -> str:
         raise NotImplementedError
@@ -32,39 +31,65 @@ class MockOfflineProvider(BaseLLMProvider):
         self.model_name = "Offline-Mock-Model-2026"
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
-        return f"[Mock Chatbot Response]: Xin chào! Tôi đã nhận được câu hỏi '{prompt}'. (Chế độ Chatbot không có Tool tra cứu dữ liệu thời gian thực)."
+        return f"[Mock Chatbot Response]: Xin chào! Khi đi du lịch, bạn nên chuẩn bị đầy đủ giấy tờ cá nhân, lên kế hoạch tài chính và kiểm tra thời tiết trước chuyến đi. (Chế độ Chatbot không có Tool tra cứu dữ liệu thời gian thực)."
 
     def generate_with_tools(self, prompt: str, tools_schema: List[Dict[str, Any]], system_prompt: str = "") -> Dict[str, Any]:
         prompt_lower = prompt.lower()
         
-        # Mô phỏng nhận diện intent gọi Tool
-        if "sv2026001" in prompt_lower and "đặt lịch" in prompt_lower:
+        # Mô phỏng nhận diện intent gọi Tool cho Travel Assistant
+        if "không tồn tại" in prompt_lower or "aleloodjs" in prompt_lower or "một mình" in prompt_lower:
+            dest_name = "Aleloodjs" if "aleloodjs" in prompt_lower else "địa điểm không tồn tại"
             return {
                 "type": "tool_call",
-                "tool_name": "schedule_appointment",
-                "arguments": {"student_id": "SV2026001", "datetime_str": "14:00 15/09/2026", "advisor_name": "PGS.TS Nguyễn Văn A"},
-                "thought": "Người dùng yêu cầu đặt lịch hẹn tư vấn cho sinh viên SV2026001. Tôi sẽ gọi tool schedule_appointment."
+                "tool_name": "trip_planning",
+                "arguments": {"destination": dest_name},
+                "thought": f"Người dùng hỏi về địa điểm '{dest_name}'. Tôi sẽ gọi tool trip_planning để tra cứu."
             }
-        elif "sv2026001" in prompt_lower or "tra cứu" in prompt_lower:
+        elif "đà lạt" in prompt_lower or "home stay" in prompt_lower or "budget" in prompt_lower or "khách sạn" in prompt_lower:
             return {
                 "type": "tool_call",
-                "tool_name": "academic_query",
-                "arguments": {"student_id": "SV2026001"},
-                "thought": "Người dùng muốn tra cứu thông tin học vụ của sinh viên SV2026001. Tôi sẽ gọi tool academic_query."
+                "tool_name": "search_accommodations",
+                "arguments": {
+                    "location": "Đà Lạt",
+                    "max_budget": 1000000,
+                    "preference": "homestay trải nghiệm địa phương ít người biết"
+                },
+                "thought": "Người dùng tìm kiếm homestay/khách sạn tại Đà Lạt với ngân sách dưới 1 triệu/đêm. Tôi sẽ gọi tool search_accommodations."
+            }
+        elif "đà nẵng" in prompt_lower or "lịch trình" in prompt_lower or "review" in prompt_lower:
+            return {
+                "type": "tool_call",
+                "tool_name": "trip_planning",
+                "arguments": {
+                    "destination": "Đà Nẵng",
+                    "duration": "3 ngày 2 đêm",
+                    "people_count": 2
+                },
+                "thought": "Người dùng cần gợi ý lịch trình du lịch tại Đà Nẵng. Tôi sẽ gọi tool trip_planning."
             }
         else:
             return {
                 "type": "text",
-                "content": f"[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-                "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool."
+                "content": f"[Mock Agent Response]: Xin chào! Để chuẩn bị cho một chuyến du lịch hoàn hảo, bạn nên đặt trước dịch vụ di chuyển, hành lý tối giản và lên danh sách các địa điểm yêu thích.",
+                "thought": "Câu hỏi chung về lời khuyên du lịch, trả lời trực tiếp không cần gọi Tool."
             }
 
 
 class GeminiProvider(BaseLLMProvider):
     """Google Gemini Provider (Native Tool Calling với Google GenAI SDK)"""
     def __init__(self, api_key: str = None, model: str = None):
+        raw_key = api_key or os.getenv("GEMINI_API_KEY")
+        self.api_key = raw_key.strip() if raw_key else None
+        raw_model = model or os.getenv("LLM_MODEL") or "gemini-3.6-flash"
+        self.model_name = raw_model.strip()
+
+class GeminiProvider(BaseLLMProvider):
+    """Google Gemini Provider (Native Tool Calling với Google GenAI SDK)"""
+    def __init__(self, api_key: str = None, model: str = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        self.model_name = model or os.getenv("LLM_MODEL") or "gemini-2.5-flash"
+        self.model_name = model or os.getenv("LLM_MODEL") or "gemini-1.5-flash"
+
+
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
         if not self.api_key or self.api_key == "your_gemini_api_key_here":

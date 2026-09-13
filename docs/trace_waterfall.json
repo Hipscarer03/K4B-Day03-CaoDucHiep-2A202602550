@@ -1,29 +1,170 @@
 [
   {
     "step": 1,
-    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "query": "Chào bạn, bạn có thể giới thiệu các lưu ý cơ bản và mẹo chuẩn bị khi đi du lịch tự túc không?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool.",
-    "output": "[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-    "latency_ms": 2845.93
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn! Du lịch tự túc mang lại sự tự do và linh hoạt rất lớn, nhưng để chuyến đi diễn ra suôn sẻ và an toàn, bạn nên chuẩn bị kỹ lưỡng theo các lưu ý và mẹo sau:\n\n---\n\n### 1. **Lên kế hoạch và Ngân sách**\n* **Xác định lịch trình sơ bộ:** Đánh dấu các điểm tham quan chính, khoảng cách giữa các điểm và thời gian di chuyển dự kiến để tránh bị quá tải.\n* **Dự trù ngân sách:** Chia nhỏ ngân sách cho các khoản: Di chuyển, Lưu trú, Ăn uống, Vé tham quan/Hoạt động và Quỹ dự phòng sự cố (khoảng 10–15% tổng chi phí).\n* **Đặt dịch vụ sớm:** Đặt vé máy bay/xe và phòng khách sạn trước 1–3 tháng (hoặc sớm hơn vào mùa cao điểm) để có giá tốt và nhiều lựa chọn.\n\n---\n\n### 2. **Hồ sơ và Giấy tờ tùy thân**\n* **Giấy tờ cá nhân:** Căn cước công dân/Hộ chiếu (còn hạn ít nhất 6 tháng nếu đi nước ngoài), Bằng lái xe (nếu định thuê xe tự lái), Vé máy bay/phòng đặt trước.\n* **Lưu bản sao (Backup):** Chụp ảnh/lưu file PDF toàn bộ giấy tờ quan trọng vào điện thoại và Google Drive/Email phòng trường hợp làm mất bản cứng.\n\n---\n\n### 3. **Hành lý và Đồ dùng cá nhân**\n* **Gọn nhẹ là ưu tiên hàng đầu:** Chỉ mang quần áo đủ dùng, ưu tiên đồ dễ phối và nhanh khô. \n* **Túi y tế cá nhân:** Mang theo các loại thuốc cơ bản: thuốc cảm, hạ sốt, đau bụng, dị ứng, băng cá nhân và thuốc chống côn trùng.\n* **Đồ điện tử:** Sạc dự phòng, cáp sạc đa năng, củ sạc du lịch (đặc biệt củ sạc chân đa năng nếu đi nước ngoài).\n\n---\n\n### 4. **Tài chính và Thanh toán**\n* **Đa dạng hình thức thanh toán:** Chuẩn bị một lượng tiền mặt vừa đủ (đặc biệt tiền lẻ/tiền mệnh giá nhỏ để chi tiêu tại chợ, xe buýt) cùng với 1–2 thẻ ngân hàng/thẻ tín dụng.\n* **Thông báo cho ngân hàng:** Nếu đi du lịch quốc tế, hãy mở tính năng thanh toán quốc tế cho thẻ để tránh bị khóa thẻ bất ngờ.\n\n---\n\n### 5. **Ứng dụng và Mẹo công nghệ**\n* **Bản đồ ngoại tuyến:** Tải sẵn Google Maps ngoại tuyến (Offline Maps) của khu vực sắp đến.\n* **Ứng dụng di chuyển & ăn uống:** Tải trước các ứng dụng gọi xe (Grab, Gojek, Kakao T...), ứng dụng dịch ngôn ngữ (Google Translate) và ứng dụng đánh giá địa điểm (TripAdvisor, Google Maps).\n\n---\n\n### 6. **An toàn và Văn hóa địa phương**\n* **Tìm hiểu văn hóa:** Tìm hiểu trước các quy định văn hóa (trang phục khi vào chùa/đền, tiền tip, quy tắc giao tiếp...).\n* **Bảo vệ tài sản:** Không để đồ có giá trị ở túi sau hoặc nơi dễ bị móc túi; dùng khóa nhỏ cho balo khi di chuyển ở nơi đông người.\n\n---\n\nNếu bạn đã có destination (điểm đến), số ngày đi hoặc ngân sách cụ thể, hãy chia sẻ nhé! Mình có thể hỗ trợ bạn gợi ý lịch trình hoặc tìm kiếm gợi ý lưu trú phù hợp. chúc bạn có những chuyến đi vui vẻ!",
+    "latency_ms": 16807.62
   },
   {
     "step": 1,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu bài đăng review và gợi ý lịch trình du lịch tại Đà Nẵng.",
     "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
+    "tool_name": "trip_planning",
     "arguments": {
-      "student_id": "SV2026001"
+      "destination": "Đà Nẵng",
+      "duration": "3 ngày 2 đêm",
+      "people_count": 2
     },
-    "observation": {},
-    "latency_ms": 799.12
+    "observation": {
+      "status": "SUCCESS",
+      "destination": "Đà Nẵng",
+      "duration": "3 ngày 2 đêm",
+      "people_count": 2,
+      "data": {
+        "destination": "Đà Nẵng",
+        "recommended_duration": "3 ngày 2 đêm",
+        "suitable_group": "2 - 4 người",
+        "highlights": [
+          "Bán đảo Sơn Trà & Chùa Linh Ứng (ngắm toàn cảnh thành phố)",
+          "Danh thắng Ngũ Hành Sơn & Động Huyền Không",
+          "Trải nghiệm văn hóa địa phương: Làng chài Nam Ô & thưởng thức gỏi cá Nam Ô truyền thống",
+          "Dạo quanh Cầu Rồng & Chợ đêm Sơn Trà thưởng thức hải sản"
+        ],
+        "sample_itinerary_3d2n": {
+          "Day 1": "Sáng: Đón khách, nhận phòng. Chiều: Tham quan Bán đảo Sơn Trà. Tối: Xem Cầu Rồng phun lửa/nước và ăn hải sản Chợ đêm Sơn Trà.",
+          "Day 2": "Sáng: Check-in Đỉnh Bàn Cờ & Ngũ Hành Sơn. Chiều: Khám phá Làng chài Nam Ô ít người biết, ăn gỏi cá Nam Ô. Tối: Dạo phố cổ Hội An.",
+          "Day 3": "Sáng: Tắm biển Mỹ Khê, mua quà đặc sản tại Chợ Cồn. Chiều: Trả phòng & kết thúc lịch trình."
+        },
+        "review_sources": [
+          "Bài viết 'Đà Nẵng 3N2Đ tự túc cho 2 người - Khám phá góc địa phương' từ TravelVn",
+          "Review 'Bí kíp vi vu Nam Ô & Sơn Trà vắng người chốn Đà Thành' từ CheckinVietnam"
+        ]
+      }
+    },
+    "latency_ms": 999.14
   },
   {
     "step": 2,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu bài đăng review và gợi ý lịch trình du lịch tại Đà Nẵng.",
     "action_type": "FINAL_ANSWER",
     "thought": "Tổng hợp kết quả từ MCP Server thành công.",
-    "output": "Chưa thể trả lời chi tiết do chưa nhận được dữ liệu từ MCP Server (hãy hoàn thành TODO 2.1).",
+    "output": "Gợi ý lịch trình du lịch Đà Nẵng (3 ngày 2 đêm):\n🌟 Điểm nổi bật địa phương:\n - Bán đảo Sơn Trà & Chùa Linh Ứng (ngắm toàn cảnh thành phố)\n - Danh thắng Ngũ Hành Sơn & Động Huyền Không\n - Trải nghiệm văn hóa địa phương: Làng chài Nam Ô & thưởng thức gỏi cá Nam Ô truyền thống\n - Dạo quanh Cầu Rồng & Chợ đêm Sơn Trà thưởng thức hải sản\n📅 Lịch trình gợi ý:\n Day 1: Sáng: Đón khách, nhận phòng. Chiều: Tham quan Bán đảo Sơn Trà. Tối: Xem Cầu Rồng phun lửa/nước và ăn hải sản Chợ đêm Sơn Trà.\n Day 2: Sáng: Check-in Đỉnh Bàn Cờ & Ngũ Hành Sơn. Chiều: Khám phá Làng chài Nam Ô ít người biết, ăn gỏi cá Nam Ô. Tối: Dạo phố cổ Hội An.\n Day 3: Sáng: Tắm biển Mỹ Khê, mua quà đặc sản tại Chợ Cồn. Chiều: Trả phòng & kết thúc lịch trình.\n📚 Nguồn tham khảo review: Bài viết 'Đà Nẵng 3N2Đ tự túc cho 2 người - Khám phá góc địa phương' từ TravelVn, Review 'Bí kíp vi vu Nam Ô & Sơn Trà vắng người chốn Đà Thành' từ CheckinVietnam",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Hãy gợi ý lịch trình du lịch 3 ngày 2 đêm tại Đà Nẵng cho 2 người, bao gồm các thông tin về khu vực tham qua địa phương",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "trip_planning",
+    "arguments": {
+      "destination": "Đà Nẵng",
+      "duration": "3 ngày 2 đêm",
+      "people_count": 2
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "destination": "Đà Nẵng",
+      "duration": "3 ngày 2 đêm",
+      "people_count": 2,
+      "data": {
+        "destination": "Đà Nẵng",
+        "recommended_duration": "3 ngày 2 đêm",
+        "suitable_group": "2 - 4 người",
+        "highlights": [
+          "Bán đảo Sơn Trà & Chùa Linh Ứng (ngắm toàn cảnh thành phố)",
+          "Danh thắng Ngũ Hành Sơn & Động Huyền Không",
+          "Trải nghiệm văn hóa địa phương: Làng chài Nam Ô & thưởng thức gỏi cá Nam Ô truyền thống",
+          "Dạo quanh Cầu Rồng & Chợ đêm Sơn Trà thưởng thức hải sản"
+        ],
+        "sample_itinerary_3d2n": {
+          "Day 1": "Sáng: Đón khách, nhận phòng. Chiều: Tham quan Bán đảo Sơn Trà. Tối: Xem Cầu Rồng phun lửa/nước và ăn hải sản Chợ đêm Sơn Trà.",
+          "Day 2": "Sáng: Check-in Đỉnh Bàn Cờ & Ngũ Hành Sơn. Chiều: Khám phá Làng chài Nam Ô ít người biết, ăn gỏi cá Nam Ô. Tối: Dạo phố cổ Hội An.",
+          "Day 3": "Sáng: Tắm biển Mỹ Khê, mua quà đặc sản tại Chợ Cồn. Chiều: Trả phòng & kết thúc lịch trình."
+        },
+        "review_sources": [
+          "Bài viết 'Đà Nẵng 3N2Đ tự túc cho 2 người - Khám phá góc địa phương' từ TravelVn",
+          "Review 'Bí kíp vi vu Nam Ô & Sơn Trà vắng người chốn Đà Thành' từ CheckinVietnam"
+        ]
+      }
+    },
+    "latency_ms": 22302.28
+  },
+  {
+    "step": 2,
+    "query": "Hãy gợi ý lịch trình du lịch 3 ngày 2 đêm tại Đà Nẵng cho 2 người, bao gồm các thông tin về khu vực tham qua địa phương",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Gợi ý lịch trình du lịch Đà Nẵng (3 ngày 2 đêm):\n🌟 Điểm nổi bật địa phương:\n - Bán đảo Sơn Trà & Chùa Linh Ứng (ngắm toàn cảnh thành phố)\n - Danh thắng Ngũ Hành Sơn & Động Huyền Không\n - Trải nghiệm văn hóa địa phương: Làng chài Nam Ô & thưởng thức gỏi cá Nam Ô truyền thống\n - Dạo quanh Cầu Rồng & Chợ đêm Sơn Trà thưởng thức hải sản\n📅 Lịch trình gợi ý:\n Day 1: Sáng: Đón khách, nhận phòng. Chiều: Tham quan Bán đảo Sơn Trà. Tối: Xem Cầu Rồng phun lửa/nước và ăn hải sản Chợ đêm Sơn Trà.\n Day 2: Sáng: Check-in Đỉnh Bàn Cờ & Ngũ Hành Sơn. Chiều: Khám phá Làng chài Nam Ô ít người biết, ăn gỏi cá Nam Ô. Tối: Dạo phố cổ Hội An.\n Day 3: Sáng: Tắm biển Mỹ Khê, mua quà đặc sản tại Chợ Cồn. Chiều: Trả phòng & kết thúc lịch trình.\n📚 Nguồn tham khảo review: Bài viết 'Đà Nẵng 3N2Đ tự túc cho 2 người - Khám phá góc địa phương' từ TravelVn, Review 'Bí kíp vi vu Nam Ô & Sơn Trà vắng người chốn Đà Thành' từ CheckinVietnam",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Hãy gợi ý khách sạn/ home stay trong khu vực gần Đà Lạt với budget dưới 1 triệu đồng/ đêm có nhiều khu vực trải nghiệm địa phương ít người biết ",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "search_accommodations",
+    "arguments": {
+      "location": "Đà Lạt",
+      "max_budget": 1000000,
+      "preference": "homestay trải nghiệm địa phương ít người biết"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "location": "Đà Lạt",
+      "max_budget_requested": 1000000,
+      "preference": "homestay trải nghiệm địa phương ít người biết",
+      "count": 2,
+      "data": [
+        {
+          "name": "Mây Lang Thang Homestay & Chill",
+          "type": "homestay",
+          "price_per_night": 650000,
+          "address": "Phường 11, Gần Đồi Ngô Quyền, Đà Lạt",
+          "features": "Không gian gỗ ấm cúng, view thung lũng thông, gần nhiều khu vực trải nghiệm địa phương ít người biết, chủ nhà nhiệt tình chỉ dẫn tour bản địa.",
+          "rating": 4.8
+        },
+        {
+          "name": "Rừng Hoa Hillside Stay",
+          "type": "homestay",
+          "price_per_night": 850000,
+          "address": "Thái Phiên, Đà Lạt",
+          "features": "Nằm giữa vườn hoa Thái Phiên yên tĩnh, trải nghiệm tự hái dâu & làm nông dân cùng gia đình bản địa, cực kỳ yên tĩnh nhẹ nhàng.",
+          "rating": 4.7
+        }
+      ]
+    },
+    "latency_ms": 889.95
+  },
+  {
+    "step": 2,
+    "query": "Hãy gợi ý khách sạn/ home stay trong khu vực gần Đà Lạt với budget dưới 1 triệu đồng/ đêm có nhiều khu vực trải nghiệm địa phương ít người biết ",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Danh sách gợi ý nơi lưu trú phù hợp tại Đà Lạt:\n• Mây Lang Thang Homestay & Chill (homestay) - Giá: 650,000 VNĐ/đêm | Địa chỉ: Phường 11, Gần Đồi Ngô Quyền, Đà Lạt | Đặc điểm: Không gian gỗ ấm cúng, view thung lũng thông, gần nhiều khu vực trải nghiệm địa phương ít người biết, chủ nhà nhiệt tình chỉ dẫn tour bản địa. (Đánh giá: 4.8/5)\n• Rừng Hoa Hillside Stay (homestay) - Giá: 850,000 VNĐ/đêm | Địa chỉ: Thái Phiên, Đà Lạt | Đặc điểm: Nằm giữa vườn hoa Thái Phiên yên tĩnh, trải nghiệm tự hái dâu & làm nông dân cùng gia đình bản địa, cực kỳ yên tĩnh nhẹ nhàng. (Đánh giá: 4.7/5)",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Hãy nêu các lưu ý khi tham gia khu vực du lịch một mình ở địa điểm không tồn tại",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "trip_planning",
+    "arguments": {
+      "destination": "địa điểm không tồn tại"
+    },
+    "observation": {
+      "status": "NOT_FOUND",
+      "destination": "địa điểm không tồn tại",
+      "message": "Không tìm thấy bài đăng review hoặc dữ liệu gợi ý lịch trình cho địa điểm 'địa điểm không tồn tại' trong cơ sở dữ liệu."
+    },
+    "latency_ms": 972.64
+  },
+  {
+    "step": 2,
+    "query": "Hãy nêu các lưu ý khi tham gia khu vực du lịch một mình ở địa điểm không tồn tại",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "⚠️ Không tìm thấy bài đăng review hoặc dữ liệu gợi ý lịch trình cho địa điểm 'địa điểm không tồn tại' trong cơ sở dữ liệu.\n💡 Lời khuyên: Hãy kiểm tra lại tên địa điểm và lưu ý luôn tìm hiểu kỹ thông tin điểm đến từ các nguồn uy tín trước khi khởi hành.",
     "latency_ms": 10.0
   }
 ]

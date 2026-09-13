@@ -1,0 +1,91 @@
+%% Kiến trúc Travel Assistant: Native Tool Calling + ReAct Agent
+%% Render bằng Mermaid Live Editor hoặc extension Mermaid trong VS Code.
+
+flowchart LR
+    User([Người dùng]) --> App[Agent Core\nsrc/app.py]
+
+    subgraph Agent[ReAct Agent Loop]
+        App --> Prompt[System Prompt\n+ User Query]
+        Prompt --> Provider[LLM Provider\nsrc/providers.py]
+        Provider --> Decision{LLM phân tích\nquyết định}
+        Decision -->|Trả lời trực tiếp| Final[Final Answer]
+        Decision -->|Native tool_call| Action[Tool name\n+ arguments]
+        Observation[Observation từ tool] --> Synthesis[Tổng hợp kết quả]
+        Synthesis --> Final
+    end
+
+    subgraph Native[Native Tool Definitions]
+        Schema[TOOLS_SCHEMA\nJSON Schema]
+        ToolTrip[trip_planning]
+        ToolStay[search_accommodations]
+    end
+
+    Provider -. "Nhận schema để gọi native tools" .-> Schema
+    Schema --> ToolTrip
+    Schema --> ToolStay
+    Action --> MCP[MCP Client/Server\nsrc/mcp_server.py]
+    MCP --> Router[dispatch_tool_call]
+    Router --> ToolTrip
+    Router --> ToolStay
+    ToolTrip --> Data[(Mock Database\nsrc/tools.py)]
+    ToolStay --> Data
+    Data --> MCP
+    MCP --> Observation
+    Final --> User
+
+    Provider -. "API lỗi hoặc thiếu key" .-> Mock[MockOfflineProvider]
+    Mock --> Decision
+
+    classDef actor fill:#e8f1ff,stroke:#2563eb,color:#0f172a;
+    classDef agent fill:#fff7ed,stroke:#ea580c,color:#431407;
+    classDef tool fill:#ecfdf5,stroke:#059669,color:#064e3b;
+    classDef data fill:#fefce8,stroke:#ca8a04,color:#422006;
+    class User,Final actor;
+    class App,Prompt,Provider,Decision,Action,Observation,Synthesis,MCP,Router,Mock agent;
+    class Schema,ToolTrip,ToolStay tool;
+
+
+
+             Người dùng
+                  │
+                  ▼
+            Agent Core (app.py)
+                  │
+                  ▼
+      ┌─────────────────────────────┐
+      │      ReAct Agent Loop       │
+      │                             │
+      │ Prompt → LLM Provider       │
+      │            │                │
+      │            ▼                │
+      │     LLM Decision            │
+      │      ├──────────────► Final │
+      │      │                      │
+      │      ▼                      │
+      │ Tool Call                   │
+      └──────┼──────────────────────┘
+             │
+             ▼
+      MCP Client / Server
+             │
+             ▼
+     dispatch_tool_call
+        ├─────────────┐
+        ▼             ▼
+ trip_planning   search_accommodations
+        │             │
+        └──────┬──────┘
+               ▼
+        Mock Database
+               │
+               ▼
+         Observation
+               │
+               ▼
+      Tổng hợp kết quả
+               │
+               ▼
+          Final Answer
+               │
+               ▼
+          Người dùng

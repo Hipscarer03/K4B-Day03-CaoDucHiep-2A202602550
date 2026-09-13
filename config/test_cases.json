@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, bạn có thể giới thiệu các lưu ý cơ bản và mẹo chuẩn bị khi đi du lịch tự túc không?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ System Prompt, không cần gọi bất kỳ Tool nào.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu bài đăng review và gợi ý lịch trình du lịch tại Đà Nẵng.",
+    "expected_behavior": "Agent nhận diện nhu cầu tra cứu, tự động phát sinh Tool Call 'trip_planning' với địa điểm 'Đà Nẵng'.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "trip_planning",
+    "question": "Hãy gợi ý lịch trình du lịch 3 ngày 2 đêm tại Đà Nẵng cho 2 người, bao gồm các thông tin về khu vực tham qua địa phương",
+    "expected_behavior": "Agent tự động phát sinh Tool Call 'trip_planning' với các thông tin về địa điểm, số lượng người và thời gian dựa trên các bài đăng có sẵn đã chia sẻ",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Hãy gợi ý khách sạn/ home stay trong khu vực gần Đà Lạt với budget dưới 1 triệu đồng/ đêm có nhiều khu vực trải nghiệm địa phương ít người biết ",
+    "expected_behavior": "Agent thực hiện chuỗi suy luận ReAct: Tra cứu các khách sạn/ home stay trong khu vực Đà Lạt, lọc theo budget, tìm kiếm các khu vực trải nghiệm địa phương ít người biết theo bài review, và đưa ra gợi ý phù hợp.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Hãy nêu các lưu ý khi tham gia khu vực du lịch một mình ở địa điểm không tồn tại",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND từ Tool và đưa ra phản hồi lịch sự, chính xác không bịa đặt dữ liệu.",
+    "complexity": "Medium"
+  }
+]

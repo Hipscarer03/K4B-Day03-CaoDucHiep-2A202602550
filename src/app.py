@@ -121,17 +121,32 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
                 if obs_data.get("status") == "SUCCESS":
                     if "data" in obs_data:
                         d = obs_data["data"]
-                        final_answer = (
-                            f"Kết quả tra cứu cho sinh viên {obs_data.get('student_id', '')} ({d.get('full_name', '')}): "
-                            f"Lớp {d.get('class', '')}, GPA: {d.get('gpa', '')}, Email: {d.get('email', '')}, "
-                            f"Trạng thái: {d.get('status', '')}, Cố vấn: {d.get('advisor', '')}."
-                        )
+                        if isinstance(d, dict) and "highlights" in d:
+                            dest = obs_data.get("destination", d.get("destination", ""))
+                            dur = obs_data.get("duration", d.get("recommended_duration", ""))
+                            hl = "\n - ".join(d.get("highlights", []))
+                            itin = d.get("sample_itinerary_3d2n", {})
+                            itin_str = "\n ".join([f"{k}: {v}" for k, v in itin.items()])
+                            final_answer = (
+                                f"Gợi ý lịch trình du lịch {dest} ({dur}):\n"
+                                f"🌟 Điểm nổi bật địa phương:\n - {hl}\n"
+                                f"📅 Lịch trình gợi ý:\n {itin_str}\n"
+                                f"📚 Nguồn tham khảo review: {', '.join(d.get('review_sources', []))}"
+                            )
+                        elif isinstance(d, list):
+                            loc = obs_data.get("location", "")
+                            acc_list = []
+                            for p in d:
+                                acc_list.append(f"• {p.get('name')} ({p.get('type')}) - Giá: {p.get('price_per_night', 0):,} VNĐ/đêm | Địa chỉ: {p.get('address')} | Đặc điểm: {p.get('features')} (Đánh giá: {p.get('rating')}/5)")
+                            final_answer = f"Danh sách gợi ý nơi lưu trú phù hợp tại {loc}:\n" + "\n".join(acc_list)
+                        else:
+                            final_answer = f"Kết quả từ MCP Server ({tool_name}): {json.dumps(obs_data, ensure_ascii=False)}"
                     elif "message" in obs_data:
                         final_answer = obs_data["message"]
                     else:
                         final_answer = f"Đã hoàn tất xử lý qua MCP Server: {json.dumps(obs_data, ensure_ascii=False)}"
                 elif obs_data.get("status") == "NOT_FOUND":
-                    final_answer = obs_data.get("message", "Không tìm thấy thông tin sinh viên yêu cầu.")
+                    final_answer = f"⚠️ {obs_data.get('message', 'Không tìm thấy dữ liệu yêu cầu.')}\n💡 Lời khuyên: Hãy kiểm tra lại tên địa điểm và lưu ý luôn tìm hiểu kỹ thông tin điểm đến từ các nguồn uy tín trước khi khởi hành."
                 else:
                     final_answer = f"Phản hồi từ công cụ: {json.dumps(obs_data, ensure_ascii=False)}"
             
@@ -147,7 +162,7 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
             
             # Kết thúc vòng lặp sau khi hoàn tất Observation và xuất Final Answer
             print(f"🧠 [Thought]: Đã nhận được dữ liệu từ MCP Server. Tổng hợp kết quả phản hồi.")
-            print(f"🏁 [Final Answer]: {final_answer}")
+            print(f"🏁 [Final Answer]:\n{final_answer}")
             
             trace_logs.append({
                 "step": step + 1,
@@ -164,7 +179,7 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
 
 if __name__ == "__main__":
     print("==========================================================")
-    print("🏫 VINUNI AI COURSE - DAY 03 LAB: CHATBOT VS REACT AGENT")
+    print("🌴 TRAVEL ASSISTANT AI - DAY 03 LAB: CHATBOT VS REACT AGENT")
     print("==========================================================")
     
     provider = get_llm_provider()
@@ -177,15 +192,16 @@ if __name__ == "__main__":
     print(f"✅ Đã tải thành công {len(tests)} Test Cases thử nghiệm.\n")
     
     if "--interactive" in sys.argv:
-        print("🎮 [INTERACTIVE MODE] Trò chuyện trực tiếp với ReAct Agent:")
+        print("🎮 [INTERACTIVE MODE] Trò chuyện trực tiếp với ReAct Travel Agent:")
         print("💡 Gợi ý câu hỏi thử nghiệm:")
-        print("   - Câu hỏi chung: 'Quy chế học vụ VinUni yêu cầu bao nhiêu tín chỉ?'")
-        print("   - Tra cứu học vụ: 'Hãy tra cứu thông tin học vụ của sinh viên SV2026001'")
-        print("   - Đặt lịch hẹn: 'Đặt lịch hẹn tư vấn cho SV2026001 vào 14:00 ngày 15/09/2026'")
+        print("   - Câu hỏi chung: 'Hãy nêu các nguyên tắc cần nhớ khi chuẩn bị đi du lịch'")
+        print("   - Tra cứu lịch trình: 'Hãy gợi ý lịch trình du lịch 3 ngày 2 đêm tại Đà Nẵng cho 2 người'")
+        print("   - Lọc Homestay: 'Gợi ý homestay Đà Lạt budget dưới 1 triệu/đêm trải nghiệm địa phương ít người biết'")
+        print("   - Edge case: 'Lưu ý khi đi du lịch ở địa điểm không tồn tại'")
         print("   - Gõ 'exit' hoặc 'quit' để kết thúc phiên trò chuyện.\n")
         while True:
             try:
-                user_input = input("👤 Sinh viên hỏi: ").strip()
+                user_input = input("👤 Du khách hỏi: ").strip()
                 if not user_input or user_input.lower() in ["exit", "quit"]:
                     print("👋 Tạm biệt! Kết thúc phiên trò chuyện.")
                     break
@@ -226,8 +242,9 @@ if __name__ == "__main__":
         print("  1. Chat trực tiếp liên tục:   python src/app.py --interactive")
         print("  2. Chạy toàn bộ Test Cases:    python src/app.py --all\n")
         
-        sample_query = tests[1]["question"]
-        print(f"--- 🏁 DEMO CHẠY THỬ 1 TEST CASE MẪU (TC02: Tra cứu học vụ) ---")
+        sample_query = tests[2]["question"]
+        print(f"--- 🏁 DEMO CHẠY THỬ 1 TEST CASE MẪU (TC03: Trip Planning Đà Nẵng) ---")
         logs = run_react_agent(sample_query, provider, mcp_server)
         save_waterfall_trace(logs)
         print("\n💡 Hãy thử ngay lệnh: python src/app.py --interactive để chat trực tiếp!")
+
